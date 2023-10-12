@@ -1,0 +1,414 @@
+openapi: 3.0.0
+info:
+  title: API Customer
+  version: "1.0"
+
+servers:
+  - url: http://localhost:8080
+
+paths:
+
+  /profile:
+    get:
+      summary: Profile
+      operationId: getProfile
+      responses:
+        '200':
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileResponse'
+        default:
+          description: Exception Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+
+  /profile/change-settings:
+    post:
+      summary: Profile
+      operationId: changeSettings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeSettingsRequest'
+      responses:
+        '200':
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        default:
+          description: Exception Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+
+  /profile/change-interests:
+    post:
+      summary: Profile
+      operationId: changeInterests
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeInterestsRequest'
+      responses:
+        '200':
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        default:
+          description: Exception Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+
+  /profile/change-avatar:
+    post:
+      summary: Profile
+      operationId: changeAvatar
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeAvatarRequest'
+      responses:
+        '200':
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        default:
+          description: Exception Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+
+  /profile/modify-gallery:
+    post:
+      summary: Profile
+      operationId: modifyGallery
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModifyGalleryRequest'
+      responses:
+        '200':
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        default:
+          description: Exception Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+
+  /matches:
+    get:
+      summary: Matches
+      operationId: getMatches
+      responses:
+        '200':
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchesResponse'
+        default:
+          description: Exception Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+
+  /matches/profile:
+    post:
+      summary: Profile
+      operationId: getMatchProfile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MatchProfileRequest'
+      responses:
+        '200':
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchProfileResponse'
+        default:
+          description: Exception Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+
+  /matches/swipe:
+    post:
+      summary: Matches
+      operationId: swipe
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SwipeRequest'
+      responses:
+        '200':
+          description: Success Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SwipeResponse'
+        default:
+          description: Exception Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExceptionResponse'
+
+components:
+  schemas:
+    ProfileResponse:
+      type: object
+      required:
+        - user
+        - interests
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - properties:
+            user:
+              $ref: '#/components/schemas/BaseUser'
+            interests:
+              type: array
+              items:
+                $ref: '#/components/schemas/BaseInterest'
+
+    MatchProfileRequest:
+      type: object
+      required:
+        - userId
+      properties:
+        userId:
+          type: integer
+
+    MatchProfileResponse:
+      type: object
+      required:
+        - user
+        - interests
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - properties:
+            user:
+              $ref: '#/components/schemas/BaseUser'
+            interests:
+              type: array
+              items:
+                $ref: '#/components/schemas/BaseInterest'
+
+
+    ChangeSettingsRequest:
+      type: object
+      required:
+        - user
+      properties:
+        user:
+          $ref: '#/components/schemas/BaseUser'
+
+    ChangeInterestsRequest:
+      type: object
+      required:
+        - interests
+      properties:
+        interests:
+          type: array
+          items:
+            type: string
+
+    MatchesResponse:
+      type: object
+      required:
+        - users
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - properties:
+            users:
+              type: array
+              items:
+                $ref: '#/components/schemas/BaseUser'
+
+    SwipeRequest:
+      type: object
+      required:
+        - targetId
+        - swipeType
+      properties:
+        targetId:
+          type: integer
+          description: "ID of Swiped User"
+          example: 1000
+        swipeType:
+          $ref: '#/components/schemas/SwipeType'
+
+    SwipeResponse:
+      type: object
+      required:
+        -  match
+      allOf:
+        - $ref: '#/components/schemas/Response'
+        - properties:
+            match:
+              type: boolean
+              example: true
+              description: "Whether the user is matched with the swiped user"
+
+    ChangeAvatarRequest:
+      type: object
+      required:
+        - imageId
+      properties:
+        imageId:
+          type: integer
+
+    ModifyGalleryRequest:
+      type: object
+      properties:
+        uploadedPhotos:
+          type: array
+          items:
+            type: string
+        deletedPhotos:
+          type: array
+          items:
+            type: integer
+
+    Response:
+      type: object
+      required:
+        - result
+      properties:
+        result:
+          $ref: '#/components/schemas/Result'
+      discriminator:
+        propertyName: responseType
+
+    ExceptionResponse:
+      type: object
+      required:
+        - result
+      properties:
+        timestamp:
+          type: string
+          pattern: "DD-MM-YYYY HH:MI:SS"
+          example: 26-03-2020 14:28:27
+        result:
+          $ref: '#/components/schemas/Result'
+        error:
+          $ref: '#/components/schemas/Error'
+        showCaptcha:
+          type: boolean
+
+    BaseUser:
+      type: object
+      required:
+        - userId
+        - fullName
+        - email
+        - birthDate
+        - avatarImageId
+        - isVerified
+        - universityId
+        - gender
+        - orientation
+        - description
+      properties:
+        userId:
+          type: integer
+          description: "User's Id"
+          example: "4921"
+        fullName:
+          type: string
+          description: "User's name"
+          example: "Mehmet Yilmaz"
+        email:
+          type: string
+          description: "User's email"
+          example: "mehmetyilmaz@stu.khas.edu.tr"
+        birthDate:
+          type: string
+          format: "YYYY-MM-DD"
+        avatarImageId:
+          type: string
+        isVerified:
+          type: boolean
+        universityId:
+          type: integer
+        gender:
+          type: boolean
+        orientation:
+          type: integer
+        description:
+          type: string
+
+    BaseInterest:
+      type: object
+      required:
+        - interestId
+        - interestName
+      properties:
+        interestId:
+          type: integer
+          description: "Interest's ID"
+        interestName:
+          type: string
+          description: "Interest's name"
+
+    Error:
+      type: object
+      properties:
+        errorID:
+          type: integer
+          format: int32
+          description: Unique ID of the error message
+          example: 300041
+        errorMessage:
+          type: string
+          description: Description of the error message
+          example: Incorrect Login, Password.
+        errorType:
+          $ref: '#/components/schemas/ErrorType'
+
+    ErrorType:
+      type: string
+      enum:
+        - BACKEND_ERROR
+        - AUTHENTICATION_ERROR
+        - GENERAL_ERROR
+
+    SwipeType:
+      type: string
+      enum:
+        - RIGHT
+        - LEFT
+
+    Result:
+      type: string
+      enum:
+        - OK
+        - ERROR
